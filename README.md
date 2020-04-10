@@ -1,21 +1,7 @@
-# vuetwitter
+画面上のユーザー情報のコンポーネントと投稿部分のコンポーネントをつくった。
+投稿部分に関してはまだ途中
 
-> A Vue.js project
-
-## Build Setup
-
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+やること
+・投稿画面で相手のユーザーが切り替えられるようにする
+・投稿一覧部分のコンポーネントをつくる
+・投稿したら投稿一覧に表示されるようにする
