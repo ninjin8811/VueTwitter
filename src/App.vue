@@ -1,19 +1,34 @@
 <template>
   <div id="app">
-    <header-component></header-component>
+    <header-component v-model="userData"></header-component>
     <post-component></post-component>
+    <post-list></post-list>
   </div>
 </template>
 
 <script>
 import Header from './components/Header.vue'
 import Post from './components/Post.vue'
+import PostList from './components/PostList.vue'
 
 export default {
   name: 'App',
   components: {
     'header-component': Header,
-    'post-component': Post
+    'post-component': Post,
+    'post-list': PostList
+  },
+  data() {
+    return {
+      userData: {
+        currentIndex: 0,
+        userList: [
+            { id: 1, name: 'Firmino', avatarPath: require('./assets/firmino.jpg'), iine: 100 },
+            { id: 2, name: 'Mane', avatarPath: require('./assets/mane.jpg'), iine: 100 },
+            { id: 3, name: 'Allison', avatarPath: require('./assets/allison.jpg'), iine: 100 }
+        ]
+      }
+    }
   }
 }
 </script>
@@ -153,5 +168,15 @@ img {
     -o-box-sizing: border-box;
     -ms-box-sizing: border-box;
     box-sizing: border-box;
+}
+
+/* ボタン要素をリセット */
+button{
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        outline: none;
+        padding: 0;
+        appearance: none;
 }
 </style>

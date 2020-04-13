@@ -2,8 +2,8 @@
   <div class="header">
     <div class="myAccount">
       <div class="currentAccount" v-if="!isShowMyAccountMenu">
-        <img class="myAvatar" v-bind:src="avatarPath" alt="マイアバター" v-on:click="avatarTapped()">
-      <p class="myName">{{userList[currentIndex].name}}</p>
+        <img class="myAvatar" v-bind:src="currentAccount.avatarPath" alt="マイアバター" v-on:click="avatarTapped()">
+        <p class="myName">{{currentAccount.name}}<p/>
       </div>
       <ol class="selectAccount" v-if="isShowMyAccountMenu">
         <li v-for="user in userList" v-bind="user" :key="user.id">
@@ -26,12 +26,24 @@ export default {
       iine: 100,
       currentIndex: 0,
       userList: [
-        { id: 1, name: 'Firmino', avatarPath: require('../assets/firmino.jpg') },
-        { id: 2, name: 'Mane', avatarPath: require('../assets/mane.jpg') },
-        { id: 3, name: 'Allison', avatarPath: require('../assets/allison.jpg')}
+        { id: 1, name: 'Firmino', avatarPath: require('../assets/firmino.jpg'), iine: 100 },
+        { id: 2, name: 'Mane', avatarPath: require('../assets/mane.jpg'), iine: 100 },
+        { id: 3, name: 'Allison', avatarPath: require('../assets/allison.jpg'), iine: 100 }
       ],
       isShowMyAccountMenu: false
     }
+  },
+  props: {
+    userData: {
+      currentIndex: Number,
+      userList: []
+    }
+  },
+  updated() {
+
+  },
+  mounted() {
+    
   },
   methods: {
     avatarTapped: function() {
@@ -43,8 +55,8 @@ export default {
     }
   },
   computed: {
-    avatarPath: function() {
-      return this.userList[this.currentIndex].avatarPath
+    currentAccount: function() {
+      return this.userList.find(el => el.id === this.currentIndex + 1) || {}
     }
   }
 }
