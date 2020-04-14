@@ -6,7 +6,7 @@
         <div>
           <div class="currentToUser" v-if="!isShowToUserMenu">
             <img class="toUserAvatar" v-bind:src="currentToUser.avatarPath" alt="相手のユーザー" v-on:click="toUserAvatarTapped()">
-            <p>{{currentToUser.name}}{{currentID}}</p>
+            <p>{{currentToUser.name}}</p>
           </div>
           <ol class="selectToUser" v-if="isShowToUserMenu">
             <li v-for="toUser in userList" :key="toUser.id">
@@ -63,6 +63,7 @@
       },
       //送信ボタンが押された時、投稿データを親コンポーネントに反映する
       sendTapped: function() {
+        this.currentID = this.value.currentID
         const post = {
           fromUserID: this.currentID,
           toUserID: this.toUserID,

@@ -2,8 +2,7 @@
   <div id="app">
     <header-component v-model="propData"></header-component>
     <post-component v-model="propData"></post-component>
-    <post-list></post-list>
-    <p>{{propData.postList}}</p>
+    <post-list v-model="propData"></post-list>
   </div>
 </template>
 

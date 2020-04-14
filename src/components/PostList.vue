@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="messageBox">
-      <p>あああああああああああああああああああああああああああああああああああああああああああ</p>
+      <p>{{}}</p>
     </div>
     <div class="buttonBox">
       <button v-bind:class="['iineButton', highlightedClass, disabledClass]" v-on:click="iineClicked()" v-bind:disabled="iineDisabled">{{totalIINE}} <font-awesome-icon :icon="['far', 'heart']" /></button>
