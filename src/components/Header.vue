@@ -14,7 +14,7 @@
         </li>
       </ol>
     </div>
-    <p class="remainIINE">残りいいね：<span>{{iine}}</span></p>
+    <p class="remainIINE">残りいいね：<span>{{currentAccount.iine}}</span></p>
   </div>
 </template>
 
@@ -23,40 +23,40 @@ export default {
   name: 'header',
   data() {
     return {
-      iine: 100,
-      currentIndex: 0,
-      userList: [
-        { id: 1, name: 'Firmino', avatarPath: require('../assets/firmino.jpg'), iine: 100 },
-        { id: 2, name: 'Mane', avatarPath: require('../assets/mane.jpg'), iine: 100 },
-        { id: 3, name: 'Allison', avatarPath: require('../assets/allison.jpg'), iine: 100 }
-      ],
+      currentID: 1,
+      userList: [],
       isShowMyAccountMenu: false
     }
   },
   props: {
-    userData: {
-      currentIndex: Number,
-      userList: []
+    value: {
+      type: Object,
+      required: true
     }
   },
-  updated() {
-
-  },
-  mounted() {
-    
+  // 受け取った値をコンポーネントのローカルに保存
+  mounted: function() {
+    this.currentID = this.value.currentID
+    this.userList = this.value.userList
   },
   methods: {
+    //アバターがタップされた時にユーザーリストを表示する
     avatarTapped: function() {
       this.isShowMyAccountMenu = !this.isShowMyAccountMenu
     },
+    //ユーザーを選んだときの処理
     changeAccount: function(selectedID) {
+      this.currentID = selectedID
       this.isShowMyAccountMenu = !this.isShowMyAccountMenu
-      this.currentIndex = selectedID - 1
+      this.$emit('input', {
+        currentID: this.currentID
+      })
     }
   },
   computed: {
+    //現在のユーザーを返す
     currentAccount: function() {
-      return this.userList.find(el => el.id === this.currentIndex + 1) || {}
+      return this.userList.find(el => el.id === this.currentID) || {}
     }
   }
 }

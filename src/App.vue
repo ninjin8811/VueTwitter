@@ -1,8 +1,9 @@
 <template>
   <div id="app">
-    <header-component v-model="userData"></header-component>
-    <post-component></post-component>
+    <header-component v-model="propData"></header-component>
+    <post-component v-model="propData"></post-component>
     <post-list></post-list>
+    <p>{{propData.postList}}</p>
   </div>
 </template>
 
@@ -20,14 +21,24 @@ export default {
   },
   data() {
     return {
-      userData: {
-        currentIndex: 0,
+      propData: {
+        currentID: 1,
         userList: [
-            { id: 1, name: 'Firmino', avatarPath: require('./assets/firmino.jpg'), iine: 100 },
-            { id: 2, name: 'Mane', avatarPath: require('./assets/mane.jpg'), iine: 100 },
-            { id: 3, name: 'Allison', avatarPath: require('./assets/allison.jpg'), iine: 100 }
-        ]
-      }
+            { id: 1, name: 'Firmino', avatarPath: require('./assets/firmino.jpg'), iine: 100, user: [{id: 3, name: "yoshino"}] },
+            { id: 2, name: 'Mane', avatarPath: require('./assets/mane.jpg'), iine: 70 },
+            { id: 3, name: 'Allison', avatarPath: require('./assets/allison.jpg'), iine: 50 }
+        ],
+        postList: [{
+            fromUserID: 2,
+            toUserID: 3,
+            message: '最初の投稿',
+            iineCountList: [
+              { id: 1, count: 0 },
+              { id: 2, count: 0 },
+              { id: 3, count: 0 },
+            ]
+        }]
+      },
     }
   }
 }

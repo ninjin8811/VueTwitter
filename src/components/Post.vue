@@ -6,10 +6,10 @@
         <div>
           <div class="currentToUser" v-if="!isShowToUserMenu">
             <img class="toUserAvatar" v-bind:src="currentToUser.avatarPath" alt="相手のユーザー" v-on:click="toUserAvatarTapped()">
-            <p>{{currentToUser.name}}</p>
+            <p>{{currentToUser.name}}{{currentID}}</p>
           </div>
           <ol class="selectToUser" v-if="isShowToUserMenu">
-            <li v-for="toUser in toUserList" :key="toUser.id">
+            <li v-for="toUser in userList" :key="toUser.id">
               <div class="menuToUserCell" v-on:click="changeToUser(toUser.id)">
                 <img v-bind:src="toUser.avatarPath" alt="メニューのアバター">
                 <p>{{toUser.name}}</p>
@@ -18,10 +18,10 @@
           </ol>
         </div>
       </div>
-      <textarea class="messageBox" name="comment" rows="8"></textarea>
+      <textarea class="messageBox" name="comment" rows="8" placeholder="入力する" v-model="message"></textarea>
     </div>
     <div class="postButtonBox">
-      <button href="#">送信</button>
+      <button v-on:click="sendTapped()">送信</button>
     </div>
   </div>
 </template>
@@ -31,27 +31,58 @@
     name: "post",
     data() {
       return {
-        currentToUserIndex: 0,
-        toUserList: [
-          { id: 1, name: 'Firmino', avatarPath: require('../assets/firmino.jpg') },
-          { id: 2, name: 'Mane', avatarPath: require('../assets/mane.jpg') },
-          { id: 3, name: 'Allison', avatarPath: require('../assets/allison.jpg')}
-        ],
-        isShowToUserMenu: false
+        currentID: 1,
+        userList: [],
+        postList: [],
+        toUserID: 2,
+        message: "",
+        isShowToUserMenu: false,
       }
     },
+    props: {
+      value: {
+        type: Object,
+        required: true
+      }
+    },
+    // 受け取った値をコンポーネントのローカルに保存
+    mounted: function() {
+      this.currentID = this.value.currentID
+      this.userList = this.value.userList
+      this.postList = this.value.postList
+    },
     methods: {
+      //アバターがタップされたときにユーザーリストを表示
       toUserAvatarTapped: function() {
         this.isShowToUserMenu = !this.isShowToUserMenu
       },
+      //ユーザーを選んだ時の処理
       changeToUser: function(selectedID) {
         this.isShowToUserMenu = !this.isShowToUserMenu
-        this.currentToUserIndex = selectedID - 1
+        this.toUserID = selectedID
+      },
+      //送信ボタンが押された時、投稿データを親コンポーネントに反映する
+      sendTapped: function() {
+        const post = {
+          fromUserID: this.currentID,
+          toUserID: this.toUserID,
+          message: this.message,
+          iineCountList: [
+            { id: 1, count: 0 },
+            { id: 2, count: 0 },
+            { id: 3, count: 0 },
+          ]
+        }
+        this.postList.unshift(post)
+        this.$emit('input', {
+          postList: this.postList
+        })
       }
     },
     computed: {
+      //現在のユーザーを返す
       currentToUser() {
-        return this.toUserList.find(el => el.id === this.currentToUserIndex + 1) || {}
+        return this.userList.find(el => el.id === this.toUserID) || {}
       }
     }
   }
