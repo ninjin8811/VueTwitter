@@ -2,7 +2,7 @@
   <div class="postList">
     <div class="fromToUsers">
       <div class="avatarBox">
-        <img v-bind:src="fromUser.avatarPath" alt="送ったユーザー">
+        <img v-bind:src="fromUser.avatarPath" alt="送ったユーザー" v-on:click="tapped()">
         <p>{{fromUser.name}}</p>
       </div>
       <p class="rightArrow">→</p>
@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="messageBox">
-      <p>{{}}</p>
+      <p>{{post.message}}</p>
     </div>
     <div class="buttonBox">
       <button v-bind:class="['iineButton', highlightedClass, disabledClass]" v-on:click="iineClicked()" v-bind:disabled="iineDisabled">{{totalIINE}} <font-awesome-icon :icon="['far', 'heart']" /></button>
@@ -25,46 +25,81 @@
     name: 'postList',
     data() {
       return {
-        fromUserIndex: 0,
-        toUserIndex: 1,
-        currentUserIndex: 0,
-        userList: [
-          { id: 1, name: 'Firmino', avatarPath: require('../assets/firmino.jpg') },
-          { id: 2, name: 'Mane', avatarPath: require('../assets/mane.jpg') },
-          { id: 3, name: 'Allison', avatarPath: require('../assets/allison.jpg')}
-        ],
-        iineCountList: [
-          { id: 1, count: 0 },
-          { id: 2, count: 0 },
-          { id: 3, count: 0 }
-        ],
+        currentID: 1,
+        userList: [],
+        post: {},
+        countList: []
       }
     },
-    computed: {
-      fromUser: function() {
-        return this.userList.find(el => el.id === this.fromUserIndex + 1) || {}
+    props: {
+      propPost: {
+        type: Object,
+        required: true
       },
-      toUser: function() {
-        return this.userList.find(el => el.id === this.toUserIndex + 1) || {}
-      },
-      highlightedClass() {
-        return this.iineCountList[this.currentUserIndex].count > 0 ? 'buttonHighlighted' : false
-      },
-      disabledClass() {
-        return this.iineCountList[this.currentUserIndex].count >= 10 ? 'buttonDisabled' : false
-      },
-      iineDisabled() {
-        return this.iineCountList[this.currentUserIndex].count >= 10 ? true : false
-      },
-      totalIINE() {
-        return this.iineCountList.reduce((total, iineList) => total + iineList.count, 0)
+      propUserData: {
+        type: Object,
+        required: true
+      }
+    },
+    // 受け取った値をコンポーネントのローカルに保存
+    mounted: function() {
+      this.post = this.propPost
+      this.currentID = this.propUserData.currentID
+      this.userList = this.propUserData.userList
+      this.countList = this.propPost.iineCountList
+    },
+    watch: {
+      propUserData: {
+        handler: function(newValue) {
+          this.currentID = newValue.currentID
+        },
+        deep: true
       }
     },
     methods: {
       iineClicked: function() {
-        this.iineCountList[this.currentUserIndex].count += 1
+        if (this.currentUser.iine > 0) {
+          this.currentUserCount.count += 1
+          console.log(this.currentUserCount.count)
+          this.$emit('decrement-iine')
+        }
+      },
+      tapped() {
+        this.currentUserCount.count -= 1
+        console.log(this.currentUserCount.count)
       }
-    }
+    },
+    computed: {
+      fromUser() {
+        return this.userList.find(el => el.id === this.post.fromUserID) || {}
+      },
+      toUser() {
+        return this.userList.find(el => el.id === this.post.toUserID) || {}
+      },
+      currentUser() {
+        return this.userList.find(el => el.id === this.currentID) || {}
+      },
+      currentUserCount() {
+        // return this.post.iineCountList.find(el => el.id === this.currentID) || {}
+        return this.countList.find(el => el.id === this.currentID) || {}
+      },
+      highlightedClass() {
+        return this.currentUserCount.count > 0 ? 'buttonHighlighted' : false
+      },
+      disabledClass() {
+        if (this.currentUserCount.count >= 10 || this.currentID == this.post.fromUserID) {
+          return 'buttonDisabled'
+        } else {
+          return false
+        }
+      },
+      iineDisabled() {
+        return this.currentUserCount.count >= 10 || this.currentID == this.post.fromUserID ? true : false
+      },
+      totalIINE() {
+        return this.countList.reduce((total, iine) => total + iine.count, 0)
+      }
+    },
   }
 </script>
 
@@ -105,7 +140,7 @@
     width: 100%;
     margin-top: 10px;
     padding-left: 60px;
-    font-size: 16px;
+    font-size: 14px;
   }
   /* ボタン */
   .buttonBox {

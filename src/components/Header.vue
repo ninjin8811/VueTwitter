@@ -48,9 +48,7 @@ export default {
     changeAccount: function(selectedID) {
       this.currentID = selectedID
       this.isShowMyAccountMenu = !this.isShowMyAccountMenu
-      this.$emit('input', {
-        currentID: this.currentID
-      })
+      this.$emit('changed-user', selectedID)
     }
   },
   computed: {

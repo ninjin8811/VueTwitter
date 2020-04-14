@@ -33,7 +33,6 @@
       return {
         currentID: 1,
         userList: [],
-        postList: [],
         toUserID: 2,
         message: "",
         isShowToUserMenu: false,
@@ -49,7 +48,6 @@
     mounted: function() {
       this.currentID = this.value.currentID
       this.userList = this.value.userList
-      this.postList = this.value.postList
     },
     methods: {
       //アバターがタップされたときにユーザーリストを表示
@@ -74,10 +72,7 @@
             { id: 3, count: 0 },
           ]
         }
-        this.postList.unshift(post)
-        this.$emit('input', {
-          postList: this.postList
-        })
+        this.$emit('posted', post)
       }
     },
     computed: {
