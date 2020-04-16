@@ -84,7 +84,9 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "../scss/prepends.scss";
+
   .postView {
     background-color: rgb(243, 243, 243);
     border-bottom: solid 1px black;
@@ -184,13 +186,13 @@
     height: 30px;
     width: 80px;
     border-radius: 15px;
-    background-color: rgb(19, 191, 214);
+    background-color: $green;
   }
   .postButtonBox button:hover {
-    background-color: rgb(50, 211, 233);
+    background-color: $green-hover;
   }
   .postButtonBox button:active {
-    background-color: rgb(15, 147, 165);
-    color: rgb(170, 184, 197);
+    background-color: $green-active;
+    color: $text-active;
   }
 </style>

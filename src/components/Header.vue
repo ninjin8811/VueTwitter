@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: 'header',
+  name: 'main-header',
   data() {
     return {
       currentID: 1,
