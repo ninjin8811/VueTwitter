@@ -10,6 +10,8 @@
 
 <script>
 import InputForm from '../../components/InputForm.vue'
+import firebase from 'firebase/app'
+import 'firebase/auth'
 
 export default {
   name: 'login-view',
@@ -27,11 +29,16 @@ export default {
   },
   methods: {
     checkInfo(input) {
-      if (input.email === sessionStorage.email && input.password === sessionStorage.password) {
+      // if (input.email === sessionStorage.email && input.password === sessionStorage.password) {
+      //   this.$router.push('/main')
+      // } else {
+      //   this.error = true
+      // }
+      firebase.auth().signInWithEmailAndPassword(input.email, input.password).then(user => {
         this.$router.push('/main')
-      } else {
+      }).catch(err => {
         this.error = true
-      }
+      })
     }
   }
 }
