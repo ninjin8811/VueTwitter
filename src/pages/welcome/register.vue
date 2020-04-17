@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input-form v-bind="buttonType" v-on:button-clicked="signUp">
+    <input-form :value="buttonType" v-on:button-clicked="signUp">
       <template slot="titleSlot">新規登録</template>
       <template slot="pwSlot">パスワードを設定</template>
       <template slot="buttonSlot">登録する</template>

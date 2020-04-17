@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input-form v-bind="buttonType" :error="error" v-on:button-clicked="checkInfo">
+    <input-form :value="buttonType" :errorProp="error" v-on:button-clicked="checkInfo">
       <template slot="titleSlot">ログイン</template>
       <template slot="pwSlot">パスワード</template>
       <template slot="buttonSlot">ログイン</template>
