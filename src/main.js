@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store/store.js'
 import firebase from 'firebase/app'
 import "firebase/auth"
 
@@ -35,6 +36,7 @@ firebase.initializeApp(firebaseConfig);
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App)
 })
 

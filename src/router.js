@@ -32,29 +32,31 @@ const router = new VueRouter({
     {
       path: '/main',
       component: Main,
-      meta: {
-        requiresAuth: true
-      }
+      // meta: {
+      //   requiresAuth: true
+      // }
     },
   ],
 })
 
-router.beforeEach((to, from, next) => {
-  //データベースと連携するようにしたらauth().onAuthStateChanged()でログイン状態を確認する
-  let requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  let currentUser = firebase.auth().currentUser
-  if(requiresAuth) {
-    if(!currentUser) {
-      next({
-        path: '/',
-        query: {
-          redirect: to.fullPath
-        }
-      })
-    }
-  } else {
-    next()
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   //データベースと連携するようにしたらauth().onAuthStateChanged()でログイン状態を確認する
+//   let requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+//   let currentUser = firebase.auth().currentUser
+//   if(requiresAuth) {
+//     if(!currentUser) {
+//       next({
+//         path: '/',
+//         query: {
+//           redirect: to.fullPath
+//         }
+//       })
+//     } else {
+//       next()
+//     }
+//   } else {
+//     next()
+//   }
+// })
 
 export default router

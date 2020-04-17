@@ -2,7 +2,7 @@
   <div class="postList">
     <div class="fromToUsers">
       <div class="avatarBox">
-        <img v-bind:src="fromUser.avatarPath" alt="送ったユーザー" v-on:click="tapped()">
+        <img v-bind:src="fromUser.avatarPath" alt="送ったユーザー">
         <p>{{fromUser.name}}</p>
       </div>
       <p class="rightArrow">→</p>
@@ -25,8 +25,6 @@
     name: 'postList',
     data() {
       return {
-        currentID: 1,
-        userList: [],
         post: {},
         countList: []
       }
@@ -35,69 +33,62 @@
       propPost: {
         type: Object,
         required: true
-      },
-      propUserData: {
-        type: Object,
-        required: true
       }
     },
     // 受け取った値をコンポーネントのローカルに保存
     mounted: function() {
       this.post = this.propPost
-      this.currentID = this.propUserData.currentID
-      this.userList = this.propUserData.userList
       this.countList = this.propPost.iineCountList
     },
     watch: {
-      propUserData: {
+      propPost: {
         handler: function(newValue) {
-          this.currentID = newValue.currentID
+          this.countList = newValue.iineCountList
         },
         deep: true
       }
     },
-    methods: {
-      iineClicked: function() {
-        if (this.currentUser.iine > 0) {
-          this.currentUserCount.count += 1
-          console.log(this.currentUserCount.count)
-          this.$emit('decrement-iine')
-        }
-      },
-      tapped() {
-        this.currentUserCount.count -= 1
-        console.log(this.currentUserCount.count)
-      }
-    },
     computed: {
-      fromUser() {
-        return this.userList.find(el => el.id === this.post.fromUserID) || {}
+      currentUID() {
+        return this.$store.state.currentUID
       },
-      toUser() {
-        return this.userList.find(el => el.id === this.post.toUserID) || {}
+      userList() {
+        return this.$store.state.userList
       },
       currentUser() {
-        return this.userList.find(el => el.id === this.currentID) || {}
+        return this.$store.getters.currentUser
+      },
+      fromUser() {
+        return this.userList.find(user => user.id === this.post.fromUserID) || {}
+      },
+      toUser() {
+        return this.userList.find(user => user.id === this.post.toUserID) || {}
       },
       currentUserCount() {
-        // return this.post.iineCountList.find(el => el.id === this.currentID) || {}
-        return this.countList.find(el => el.id === this.currentID) || {}
+        return this.countList.find(user => user.id === this.currentUID) || {}
       },
       highlightedClass() {
         return this.currentUserCount.count > 0 ? 'buttonHighlighted' : false
       },
       disabledClass() {
-        if (this.currentUserCount.count >= 10 || this.currentID == this.post.fromUserID) {
+        if (this.currentUserCount.count >= 10 || this.currentUID == this.post.fromUserID) {
           return 'buttonDisabled'
         } else {
           return false
         }
       },
       iineDisabled() {
-        return this.currentUserCount.count >= 10 || this.currentID == this.post.fromUserID ? true : false
+        return this.currentUserCount.count >= 10 || this.currentUID == this.post.fromUserID ? true : false
       },
       totalIINE() {
         return this.countList.reduce((total, iine) => total + iine.count, 0)
+      }
+    },
+    methods: {
+      iineClicked() {
+        if (this.currentUser.iine > 0) {
+          this.$store.commit('manipulateIINE', this.post.postID)
+        }
       }
     },
   }

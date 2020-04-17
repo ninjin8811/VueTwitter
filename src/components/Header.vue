@@ -1,20 +1,20 @@
 <template>
   <div class="header">
     <div class="myAccount">
-      <div class="currentAccount" v-if="!isShowMyAccountMenu">
-        <img class="myAvatar" v-bind:src="currentAccount.avatarPath" alt="マイアバター" v-on:click="avatarTapped()">
-        <p class="myName">{{currentAccount.name}}<p/>
+      <div class="currentUser" v-if="!isShowMyAccountMenu">
+        <img class="myAvatar" v-bind:src="currentUser.avatarPath" alt="マイアバター" v-on:click="avatarTapped()">
+        <p class="myName">{{currentUser.name}}<p/>
       </div>
       <ol class="selectAccount" v-if="isShowMyAccountMenu">
         <li v-for="user in userList" v-bind="user" :key="user.id">
-          <div class="menuUserCell" v-on:click="changeAccount(user.id)">
+          <div class="menuUserCell" v-on:click="menuCellClicked(user.id)">
             <img v-bind:src="user.avatarPath" alt="メニューのアバター">
             <p>{{user.name}}</p>
           </div>
         </li>
       </ol>
     </div>
-    <p class="remainIINE">残りいいね：<span>{{currentAccount.iine}}</span></p>
+    <p class="remainIINE">残りいいね：<span>{{currentUser.iine}}</span></p>
   </div>
 </template>
 
@@ -23,38 +23,30 @@ export default {
   name: 'main-header',
   data() {
     return {
-      currentID: 1,
-      userList: [],
       isShowMyAccountMenu: false
     }
   },
-  props: {
-    value: {
-      type: Object,
-      required: true
+  computed: {
+    //storeのデータを使う
+    currentUID() {
+      return this.$store.state.currentUID
+    },
+    currentUser() {
+      return this.$store.getters.currentUser
+    },
+    userList() {
+      return this.$store.state.userList
     }
-  },
-  // 受け取った値をコンポーネントのローカルに保存
-  mounted: function() {
-    this.currentID = this.value.currentID
-    this.userList = this.value.userList
   },
   methods: {
     //アバターがタップされた時にユーザーリストを表示する
     avatarTapped: function() {
       this.isShowMyAccountMenu = !this.isShowMyAccountMenu
     },
-    //ユーザーを選んだときの処理
-    changeAccount: function(selectedID) {
-      this.currentID = selectedID
+    //ユーザーリストからユーザーを選んだときの処理
+    menuCellClicked: function(selectedID) {
+      this.$store.commit('changeUID', selectedID)
       this.isShowMyAccountMenu = !this.isShowMyAccountMenu
-      this.$emit('changed-user', selectedID)
-    }
-  },
-  computed: {
-    //現在のユーザーを返す
-    currentAccount: function() {
-      return this.userList.find(el => el.id === this.currentID) || {}
     }
   }
 }
@@ -76,7 +68,7 @@ export default {
     margin-left: 10px;
   }
   /* 選ばれた状態の画像と名前 */
-  .currentAccount {
+  .currentUser {
     display: flex;
     align-items: center;
   }

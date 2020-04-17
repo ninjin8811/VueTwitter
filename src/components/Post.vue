@@ -21,7 +21,7 @@
       <textarea class="messageBox" name="comment" rows="8" placeholder="入力する" v-model="message"></textarea>
     </div>
     <div class="postButtonBox">
-      <button v-on:click="sendTapped()">送信</button>
+      <button v-on:click="sendClicked()">送信</button>
     </div>
   </div>
 </template>
@@ -31,23 +31,18 @@
     name: "post",
     data() {
       return {
-        currentID: 1,
-        userList: [],
         toUserID: 2,
         message: "",
         isShowToUserMenu: false,
       }
     },
-    props: {
-      value: {
-        type: Object,
-        required: true
+    computed: {
+      userList() {
+        return this.$store.state.userList
+      },
+      currentToUser() {
+        return this.userList.find(user => user.id === this.toUserID) || {}
       }
-    },
-    // 受け取った値をコンポーネントのローカルに保存
-    mounted: function() {
-      this.currentID = this.value.currentID
-      this.userList = this.value.userList
     },
     methods: {
       //アバターがタップされたときにユーザーリストを表示
@@ -60,25 +55,12 @@
         this.toUserID = selectedID
       },
       //送信ボタンが押された時、投稿データを親コンポーネントに反映する
-      sendTapped: function() {
-        this.currentID = this.value.currentID
-        const post = {
-          fromUserID: this.currentID,
+      sendClicked: function() {
+        const postInfo = {
           toUserID: this.toUserID,
-          message: this.message,
-          iineCountList: [
-            { id: 1, count: 0 },
-            { id: 2, count: 0 },
-            { id: 3, count: 0 },
-          ]
+          message: this.message
         }
-        this.$emit('posted', post)
-      }
-    },
-    computed: {
-      //現在のユーザーを返す
-      currentToUser() {
-        return this.userList.find(el => el.id === this.toUserID) || {}
+        this.$store.commit('addPost', postInfo)
       }
     }
   }
