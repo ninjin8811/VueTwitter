@@ -3,7 +3,6 @@
     <img src="../../assets/logo.png" class="l-logoImage">
     <router-link to="/register" class="l-register register button">新規登録</router-link>
     <router-link to="/login" class="l-login login button">ログイン</router-link>
-    <router-view></router-view>
   </div>
 </template>
 
