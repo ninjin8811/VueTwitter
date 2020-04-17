@@ -22,27 +22,12 @@ export default {
       email: "",
       password: "",
       errorMessage: "メールアドレスまたはパスワードが無効",
-      isLogin: false,
-      isRegister: false,
-      error: false,
     }
   },
   props: {
-    value: {
-      type: Object,
-      required: true
-    },
-    errorProp: Boolean
-  },
-  mounted() {
-    this.isLogin = this.value.isLogin
-    this.isRegister = this.value.isRegister
-    this.error = this.errorProp
-  },
-  watch: {
-    errorProp(newValue) {
-      this.error = newValue
-    }
+    isLogin: Boolean,
+    isRegister: Boolean,
+    error: Boolean
   },
   computed: {
     isFormEnpty() {
